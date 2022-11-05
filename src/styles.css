@@ -22,14 +22,22 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px solid black;
   padding: 1rem;
-  background-color: lightgray;
+  background-color: #f4f4f4;
   cursor: pointer;
 }
 
+.inbox-user:hover {
+  background-color: #e0e0e0;
+}
+
 .user-selected {
-  background-color: lightblue;
+  background-color: #aeaeae;
+  color: white;
+}
+
+.user-selected:hover {
+  color: black;
 }
 
 .user-img {
@@ -44,10 +52,10 @@
   flex-direction: column-reverse;
   padding: 1rem;
   overflow: auto;
+  background-color: #e0e0e0;
 }
 
 .msg-container {
-  border: 1px solid black;
   border-radius: 1rem;
   padding: 1rem;
   margin-top: 1rem;
@@ -61,5 +69,5 @@
 
 .msg-other {
   align-self: flex-start;
-  background-color: lightyellow;
+  background-color: white;
 }

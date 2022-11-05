@@ -5,6 +5,7 @@ import { formatUsers, formatMessages } from "../utils";
 function Inbox() {
   const [usersMap, setUsersMap] = useState({});
   const [inboxMap, setInboxMap] = useState();
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     async function fetchMessages() {
@@ -15,9 +16,7 @@ function Inbox() {
       setUsersMap(uMap);
 
       messages.sort((a, b) => b.timestamp - a.timestamp);
-      // console.log(messages);
       const msgs = formatMessages(messages, usersMap);
-      // console.log(msgs);
       setInboxMap(msgs);
     }
     fetchMessages();
@@ -32,30 +31,35 @@ function Inbox() {
     }
   }, [inboxMap]);
 
+  function handleClick(text) {
+    console.log(text);
+    setMessage(text);
+  }
+
   return (
-    <ul>
-      {inboxMap?.map((msg) => {
-        const {
-          mostRecentMessage,
-          avatar,
-          firstName,
-          lastName,
-          // totalMessages,
-          userId,
-        } = msg;
-        return (
-          <li key={userId}>
-            <div>
-              <img src={avatar} />
-              <span>
-                {firstName} {lastName}
-              </span>
-            </div>
-            <div>{mostRecentMessage.content}</div>
-          </li>
-        );
-      })}
-    </ul>
+    <>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <ul>
+          {inboxMap?.map((msg) => {
+            const { mostRecentMessage, avatar, firstName, lastName } = msg;
+            return (
+              <li
+                key={Math.floor(Math.random() * 10000)}
+                onClick={() => handleClick(mostRecentMessage.content)}
+              >
+                <div>
+                  <img src={avatar} />
+                  <span>
+                    {firstName} {lastName}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div>{message}</div>
+    </>
   );
 }
 

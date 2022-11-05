@@ -1,13 +1,22 @@
-.App {
+html,
+body {
+  background-color: #2e3150;
+  color: white;
   font-family: sans-serif;
+}
+
+.App {
+  margin: 2rem;
 }
 
 .inbox-view {
   display: flex;
+  flex-basis: 100%;
   flex-direction: row;
-  border: 1px solid black;
-  height: 70vh;
+  height: 80vh;
   overflow: auto;
+  color: black;
+  border-radius: 1rem;
 }
 
 .inbox-left-panel {
@@ -28,16 +37,17 @@
 }
 
 .inbox-user:hover {
-  background-color: #e0e0e0;
+  background-color: #4c4c4c;
+  color: white;
 }
 
 .user-selected {
-  background-color: #aeaeae;
+  background-color: #949494;
   color: white;
 }
 
 .user-selected:hover {
-  color: black;
+  color: white;
 }
 
 .user-img {
@@ -50,9 +60,10 @@
 .inbox-right-panel {
   display: flex;
   flex-direction: column-reverse;
+  flex-basis: 100%;
   padding: 1rem;
   overflow: auto;
-  background-color: #e0e0e0;
+  background-color: #4c4c4c;
 }
 
 .msg-container {
@@ -64,7 +75,7 @@
 
 .msg-self {
   align-self: flex-end;
-  background-color: lightblue;
+  background-color: #c5d2d7;
 }
 
 .msg-other {

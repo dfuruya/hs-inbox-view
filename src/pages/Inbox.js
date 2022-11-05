@@ -25,17 +25,18 @@ function Inbox() {
   useEffect(() => {
     if (inboxMap?.length) {
       const conversations = [...inboxMap].map((convo) => {
+        const conversation = { ...convo };
         const [mostRecentMessage] = convo.messages;
         const totalMessages = convo.messages.length;
-        delete convo["messages"];
-        return { ...convo, mostRecentMessage, totalMessages };
+        delete conversation["messages"];
+        return { ...conversation, mostRecentMessage, totalMessages };
       });
       postInboxData({ conversations });
     }
   }, [inboxMap]);
 
   function handleClick(msgs) {
-    console.log(msgs);
+    // console.log(msgs);
     setMessages(msgs);
   }
 
@@ -43,25 +44,31 @@ function Inbox() {
     <div className="inbox-view">
       <ul className="inbox-left-panel">
         {inboxMap?.map((msg) => {
-          const { avatar, firstName, lastName, messages } = msg;
+          const { avatar, firstName, lastName, messages, userId } = msg;
           return (
             <li
               className="inbox-user"
-              key={Math.floor(Math.random() * 10000)}
+              key={userId}
               onClick={() => handleClick(messages)}
             >
-              <img src={avatar} />
+              <img className="user-img" src={avatar} />
               <span>
-                {firstName} {lastName}
+                {firstName} {lastName[0]}
               </span>
             </li>
           );
         })}
       </ul>
-      <div>
-        {messages?.map((msg) => (
-          <p key={msg.timestamp}>{msg.content}</p>
-        ))}
+      <div className="inbox-right-panel">
+        {messages?.map((msg) => {
+          const { isSelf } = usersMap[msg.userId];
+          const className = `msg-container msg-${isSelf ? "self" : "other"}`;
+          return (
+            <div className={className} key={msg.timestamp}>
+              {msg.content}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

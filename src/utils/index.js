@@ -32,11 +32,6 @@ export const formatMessages = (msgs, usersMap) => {
           avatar,
           firstName,
           lastName,
-          // mostRecentMessage: {
-          //   content,
-          //   timestamp,
-          //   userId: fromUserId,
-          // },
           messages: [
             {
               content,
@@ -44,7 +39,6 @@ export const formatMessages = (msgs, usersMap) => {
               userId: fromUserId,
             },
           ],
-          // totalMessages: 1,
           userId: id,
         });
       }

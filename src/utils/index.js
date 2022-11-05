@@ -17,22 +17,34 @@ export const formatMessages = (msgs, usersMap) => {
 
       const { id, avatar, firstName, lastName } = user;
       const item = msgMap.get(id);
+      const msgToAdd = {
+        content,
+        timestamp,
+        userId: fromUserId,
+      };
 
       if (item) {
         // if already in "conversations"
-        item["totalMessages"] = item["totalMessages"] + 1;
-        msgMap.set(id, item);
+        const msgs = [...item.messages, msgToAdd];
+        msgMap.set(id, { ...item, messages: msgs });
       } else {
         msgMap.set(id, {
           avatar,
           firstName,
           lastName,
-          mostRecentMessage: {
-            content,
-            timestamp,
-            userId: fromUserId,
-          },
-          totalMessages: 1,
+          // mostRecentMessage: {
+          //   content,
+          //   timestamp,
+          //   userId: fromUserId,
+          // },
+          messages: [
+            {
+              content,
+              timestamp,
+              userId: fromUserId,
+            },
+          ],
+          // totalMessages: 1,
           userId: id,
         });
       }

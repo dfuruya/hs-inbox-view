@@ -5,7 +5,7 @@ import { formatUsers, formatMessages } from "../utils";
 function Inbox() {
   const [usersMap, setUsersMap] = useState({});
   const [inboxMap, setInboxMap] = useState();
-  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     async function fetchMessages() {
@@ -16,7 +16,7 @@ function Inbox() {
       setUsersMap(uMap);
 
       messages.sort((a, b) => b.timestamp - a.timestamp);
-      const msgs = formatMessages(messages, usersMap);
+      const msgs = formatMessages(messages, uMap);
       setInboxMap(msgs);
     }
     fetchMessages();
@@ -24,42 +24,46 @@ function Inbox() {
 
   useEffect(() => {
     if (inboxMap?.length) {
-      const data = {
-        conversations: inboxMap,
-      };
-      postInboxData(data);
+      const conversations = [...inboxMap].map((convo) => {
+        const [mostRecentMessage] = convo.messages;
+        const totalMessages = convo.messages.length;
+        delete convo["messages"];
+        return { ...convo, mostRecentMessage, totalMessages };
+      });
+      postInboxData({ conversations });
     }
   }, [inboxMap]);
 
-  function handleClick(text) {
-    console.log(text);
-    setMessage(text);
+  function handleClick(msgs) {
+    console.log(msgs);
+    setMessages(msgs);
   }
 
   return (
-    <>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <ul>
-          {inboxMap?.map((msg) => {
-            const { mostRecentMessage, avatar, firstName, lastName } = msg;
-            return (
-              <li
-                key={Math.floor(Math.random() * 10000)}
-                onClick={() => handleClick(mostRecentMessage.content)}
-              >
-                <div>
-                  <img src={avatar} />
-                  <span>
-                    {firstName} {lastName}
-                  </span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+    <div className="inbox-view">
+      <ul className="inbox-left-panel">
+        {inboxMap?.map((msg) => {
+          const { avatar, firstName, lastName, messages } = msg;
+          return (
+            <li
+              className="inbox-user"
+              key={Math.floor(Math.random() * 10000)}
+              onClick={() => handleClick(messages)}
+            >
+              <img src={avatar} />
+              <span>
+                {firstName} {lastName}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <div>
+        {messages?.map((msg) => (
+          <p key={msg.timestamp}>{msg.content}</p>
+        ))}
       </div>
-      <div>{message}</div>
-    </>
+    </div>
   );
 }
 

@@ -21,7 +21,7 @@ export const formatMessages = (msgs, usersMap) => {
       if (item) {
         // if already in "conversations"
         item["totalMessages"] = item["totalMessages"] + 1;
-        msgMap.set(fromUserId, item);
+        msgMap.set(id, item);
       } else {
         msgMap.set(id, {
           avatar,

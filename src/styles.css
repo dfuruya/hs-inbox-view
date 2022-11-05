@@ -25,6 +25,7 @@
   border: 1px solid black;
   padding: 1rem;
   background-color: lightgray;
+  cursor: pointer;
 }
 
 .user-selected {

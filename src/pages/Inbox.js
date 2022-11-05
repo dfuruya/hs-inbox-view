@@ -52,7 +52,14 @@ function Inbox() {
               key={userId}
               onClick={() => handleClick(ix)}
             >
-              <img className="user-img" src={avatar} />
+              <img
+                className="user-img"
+                src={avatar}
+                onError={(e) => {
+                  e.target.src = "/user-svgrepo-com.svg"; // some replacement image
+                  // e.target.style = "padding: 8px; margin: 16px"; // inline styles in html format
+                }}
+              />
               <span>
                 {firstName} {lastName[0]}
               </span>

@@ -5,7 +5,7 @@ import { formatUsers, formatMessages } from "../utils";
 function Inbox() {
   const [usersMap, setUsersMap] = useState({});
   const [inboxMap, setInboxMap] = useState();
-  const [messages, setMessages] = useState([]);
+  const [selectedUserIx, setSelectedUserIx] = useState([]);
 
   useEffect(() => {
     async function fetchMessages() {
@@ -35,21 +35,22 @@ function Inbox() {
     }
   }, [inboxMap]);
 
-  function handleClick(msgs) {
-    // console.log(msgs);
-    setMessages(msgs);
+  function handleClick(inboxIs) {
+    setSelectedUserIx(inboxIs);
   }
 
   return (
     <div className="inbox-view">
       <ul className="inbox-left-panel">
-        {inboxMap?.map((msg) => {
-          const { avatar, firstName, lastName, messages, userId } = msg;
+        {inboxMap?.map((convo, ix) => {
+          const { avatar, firstName, lastName, userId } = convo;
+          const isSelected = selectedUserIx === ix;
+          const className = `inbox-user ${isSelected ? "user-selected" : ""}`;
           return (
             <li
-              className="inbox-user"
+              className={className}
               key={userId}
-              onClick={() => handleClick(messages)}
+              onClick={() => handleClick(ix)}
             >
               <img className="user-img" src={avatar} />
               <span>
@@ -60,12 +61,13 @@ function Inbox() {
         })}
       </ul>
       <div className="inbox-right-panel">
-        {messages?.map((msg) => {
-          const { isSelf } = usersMap[msg.userId];
+        {inboxMap?.[selectedUserIx]?.messages.map((msg) => {
+          const { userId, timestamp, content } = msg;
+          const { isSelf } = usersMap[userId];
           const className = `msg-container msg-${isSelf ? "self" : "other"}`;
           return (
-            <div className={className} key={msg.timestamp}>
-              {msg.content}
+            <div className={className} key={timestamp}>
+              {content}
             </div>
           );
         })}

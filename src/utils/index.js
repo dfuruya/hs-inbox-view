@@ -48,3 +48,13 @@ export const formatMessages = (msgs, usersMap) => {
 
   return Array.from(messagesMap.values());
 };
+
+export const formatPostData = (inboxMap) => {
+  return [...inboxMap].map((convo) => {
+    const conversation = { ...convo };
+    const [mostRecentMessage] = convo.messages;
+    const totalMessages = convo.messages.length;
+    delete conversation["messages"];
+    return { ...conversation, mostRecentMessage, totalMessages };
+  });
+};

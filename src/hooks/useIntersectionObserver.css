@@ -1,0 +1,15 @@
+.inbox-scroll {
+  position: fixed;
+  width: 16%;
+  margin-left: 7%;
+  margin-right: 73%;
+  background-color: lightblue;
+}
+
+.scroll-to-bottom {
+  bottom: 0.5rem;
+}
+
+.scroll-to-top {
+  top: 0.5rem;
+}

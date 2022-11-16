@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { getMessages, postInboxData } from "../api";
 import { formatUsers, formatMessages, formatPostData } from "../utils";
+import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 
 import User from "../components/User";
 import Message from "../components/Message";
@@ -10,6 +11,7 @@ function Inbox() {
   const [usersMap, setUsersMap] = useState({});
   const [inboxMap, setInboxMap] = useState();
   const [selectedUserIx, setSelectedUserIx] = useState([]);
+  // const rootRef = useRef();
 
   useEffect(() => {
     fetchMessages();
@@ -27,12 +29,10 @@ function Inbox() {
     }
   }, []);
 
-  useEffect(() => {
-    if (inboxMap?.length) {
-      const conversations = formatPostData(inboxMap);
-      postInboxData({ conversations });
-    }
-  }, [inboxMap]);
+  useIntersectionObserver({
+    root: document.querySelector(".scroll-overlay"),
+    items: inboxMap,
+  });
 
   function handleSelectUser(inboxIx) {
     setSelectedUserIx(inboxIx);
@@ -40,15 +40,18 @@ function Inbox() {
 
   return (
     <div className="inbox-view">
-      <ul className="inbox-left-panel">
-        {inboxMap?.map((convo, ix) => (
-          <User
-            user={convo}
-            isSelected={ix === selectedUserIx}
-            handleSelectUser={() => handleSelectUser(ix)}
-          />
-        ))}
-      </ul>
+      <div className="inbox-left-container">
+        <div className="scroll-overlay" />
+        <ul className="inbox-left-panel">
+          {inboxMap?.map((convo, ix) => (
+            <User
+              user={convo}
+              isSelected={ix === selectedUserIx}
+              handleSelectUser={() => handleSelectUser(ix)}
+            />
+          ))}
+        </ul>
+      </div>
       <div className="inbox-right-panel">
         {inboxMap?.[selectedUserIx]?.messages.map((msg) => (
           <Message message={msg} isSelf={usersMap?.[msg.userId]?.isSelf} />
